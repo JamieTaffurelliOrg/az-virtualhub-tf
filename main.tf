@@ -20,7 +20,7 @@ resource "azurerm_virtual_hub" "vhub" {
 }
 
 resource "azurerm_vpn_server_configuration" "vpn_config" {
-  for_each                 = var.p2s_vpn == null ? [] : [var.p2s_vpn]
+  count                    = var.p2s_vpn == null ? 0 : 1
   name                     = var.p2s_vpn.vpn_server_configuration_name
   resource_group_name      = var.resource_group_name
   location                 = var.location
@@ -74,7 +74,7 @@ resource "azurerm_vpn_server_configuration" "vpn_config" {
 }
 
 resource "azurerm_point_to_site_vpn_gateway" "p2sgw" {
-  for_each                            = var.p2s_vpn == null ? [] : [var.p2s_vpn]
+  count                               = var.p2s_vpn == null ? 0 : 1
   name                                = var.p2s_vpn.vpn_gateway_name
   location                            = var.location
   resource_group_name                 = var.resource_group_name
@@ -115,7 +115,7 @@ resource "azurerm_point_to_site_vpn_gateway" "p2sgw" {
 }
 
 resource "azurerm_monitor_diagnostic_setting" "p2svpn_diagnostics" {
-  for_each                   = var.p2s_vpn == null ? [] : [1]
+  count                      = var.p2s_vpn == null ? 0 : 1
   name                       = "${var.log_analytics_workspace_name}-security-logging"
   target_resource_id         = azurerm_point_to_site_vpn_gateway.p2sgw[0].id
   log_analytics_workspace_id = data.azurerm_log_analytics_workspace.logs.id
