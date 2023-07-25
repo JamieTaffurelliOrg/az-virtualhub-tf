@@ -182,12 +182,12 @@ resource "azurerm_monitor_diagnostic_setting" "p2svpn_diagnostics" {
 }
 
 resource "azurerm_firewall" "firewall" {
+  #checkov:skip=CKV_AZURE_216:Threat intel mode is inherited from firewall policy
   name                = var.firewall.name
   location            = var.location
   resource_group_name = var.resource_group_name
   sku_name            = "AZFW_Hub"
   sku_tier            = var.firewall.sku
-  threat_intel_mode   = var.firewall.threat_intel_mode
   firewall_policy_id  = data.azurerm_firewall_policy.firewall_policy.id
   zones               = var.firewall.zone_redundant == true ? ["1", "2", "3"] : null
 
