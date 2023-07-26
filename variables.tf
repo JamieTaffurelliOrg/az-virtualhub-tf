@@ -116,6 +116,18 @@ variable "firewall" {
   description = "Azure firewall"
 }
 
+variable "public_ip_prefixes" {
+  type = list(object(
+    {
+      name          = string
+      ip_version    = optional(string, "IPv4")
+      prefix_length = number
+    }
+  ))
+  default     = []
+  description = "Public IP prefixes to deploy"
+}
+
 variable "log_analytics_workspace_name" {
   type        = string
   description = "Name of Log Analytics Workspace to send diagnostics"
